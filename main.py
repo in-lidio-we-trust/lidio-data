@@ -105,12 +105,14 @@ class MainWindow(QMainWindow):
 
         if filename:
             try:
-                self.df.to_excel(filename, index=False, engine='xlsxwriter')
+                if not filename.endswith('.xlsx'):
+                    filename += '.xlsx'  # adiciona a extensão .xlsx se ela não estiver presente
+                    self.df.to_excel(filename, index=False, engine='xlsxwriter')
             except Exception as e:
                 QMessageBox.critical(self, "Erro", str(e))
-            else:
-                QMessageBox.information(self, "Sucesso", "Tabela salva com sucesso!")
-                
+        else:
+            QMessageBox.information(self, "Sucesso", "Tabela salva com sucesso!")
+
     def option1(self):
         # Renomeando colunas
         self.df = self.df.rename(columns={'IDENTIF_1': 'id', 'IDENTIF_2': 'prof', 'AL': 'Al', 'AR_FINA': 'Areia fina',
