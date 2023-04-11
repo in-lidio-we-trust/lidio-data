@@ -23,50 +23,53 @@ class MainWindow(QMainWindow):
     def initUI(self):
         self.setWindowTitle("LIDIO: Lovingly Improved Data Input Organizer.")
 
-        # Criação da barra de menu
+        # Creation of the menu bar
         menubar = self.menuBar()
         file_menu = menubar.addMenu("Arquivo")
 
-        # Adição do item de abrir arquivo ao menu
+        # Adding the file open item to the menu
         open_file = QAction("Abrir arquivo", self)
         open_file.setShortcut("Ctrl+O")
         open_file.setStatusTip("Abrir arquivo")
         open_file.triggered.connect(self.openFile)
         file_menu.addAction(open_file)
 
-        # Adição da tabela à janela principal
+        # Adding the table to the main window
         self.tableWidget = QTableWidget()
         self.setCentralWidget(self.tableWidget)
 
-        # Adição do botão de padronizar dados
+        # Adding the standardize data button 
         padronizar_btn = QPushButton("Padronizar dados")
         padronizar_btn.clicked.connect(self.showOptions)
         self.padronizar_options = QHBoxLayout()
         self.padronizar_options.addWidget(padronizar_btn)
 
-        # Adição do botão de download
+        # Adding the download button 
         download_btn = QPushButton("Salvar tabela")
         download_btn.clicked.connect(self.downloadTable)
         self.download_layout = QHBoxLayout()
         self.download_layout.addWidget(download_btn)
 
-        # Adição do layout vertical para organizar os widgets
+        # Creating the main widget and setting the layout 
         layout = QVBoxLayout()
         layout.addLayout(self.padronizar_options)
         layout.addWidget(self.tableWidget)
         layout.addLayout(self.download_layout)
 
-        # Criação do widget principal e definição do layout
+        # Creating the main widget and setting the layout. 
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
-        # Ajuste do tamanho da janela
+        # Adjusting the window size. 
         self.resize(800, 600)
         self.show()
+        
+        # Opening the file when the window opens. 
+        self.openFile()
 
     def openFile(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Abrir arquivo", "", "CSV (*.csv);;XLSX (*.xlsx);;XLS (*.xls)")
+        filename, _ = QFileDialog.getOpenFileName(self, "Abrir arquivo", "", "XLSX (*.xlsx);;CSV (*.csv);;XLS (*.xls)")
         if filename:
             try:
                 if filename.endswith(".csv"):
@@ -90,13 +93,13 @@ class MainWindow(QMainWindow):
                 self.tableWidget.setItem(row, col, QTableWidgetItem(str(self.df.iloc[row, col]))) 
 
     def showOptions(self):
-        self.padronizar_options.itemAt(0).widget().deleteLater()  # Remove o botão "Padronizar Dados"
-        for i in reversed(range(self.padronizar_options.count())):  # Remove as opções antigas
+        self.padronizar_options.itemAt(0).widget().deleteLater()  # Removing the "Standardize Data" button. 
+        for i in reversed(range(self.padronizar_options.count())):  # Removing old options. 
             self.padronizar_options.itemAt(i).widget().setParent(None)
 
-        self.padronizar_options.addWidget(QPushButton("Opção 1"))
+        self.padronizar_options.addWidget(QPushButton("A fazer"))
         self.padronizar_options.addWidget(QPushButton("Unithal"))
-        self.padronizar_options.addWidget(QPushButton("Opção 3"))
+        self.padronizar_options.addWidget(QPushButton("A fazer 2"))
         
         self.padronizar_options.itemAt(1).widget().clicked.connect(self.option1)
 
@@ -106,7 +109,7 @@ class MainWindow(QMainWindow):
         if filename:
             try:
                 if not filename.endswith('.xlsx'):
-                    filename += '.xlsx'  # adiciona a extensão .xlsx se ela não estiver presente
+                    filename += '.xlsx'  # Adds the .xlsx extension if it is not present. 
                     self.df.to_excel(filename, index=False, engine='xlsxwriter')
             except Exception as e:
                 QMessageBox.critical(self, "Erro", str(e))
@@ -162,7 +165,7 @@ class MainWindow(QMainWindow):
         self.df['S/P'] = ''
         self.df['t'] = ''
         
-        # Padronizando posicoes das colunas
+        # Standardizing the positions of the columns. 
         self.df = self.df.loc[:, ['id', 'prof', 'Al', 'AlS', 'Altimetria SRTM', 'Areia fina', 'Areia grossa',
                 'Areia total', 'Argila', 'B', 'C', 'Ca', 'Ca+Mg', 'CaS', 'CEa', 'Cl', 'CO3',
                 'CTC', 'Cu', 'Ds', 'Fe', 'Fe/Mn', 'FeO', 'H', 'H/Al', 'HCO3', 'K', 'K mg', 'K/Na',
@@ -171,12 +174,12 @@ class MainWindow(QMainWindow):
                 'P/Zn', 'RAS', 'Ca/K', 'Ca/Mg', 'Ca+Mg/K', 'Mg/K', 'S', 'Al%', 'Ca%', 'H%', 'H/Al%',
                 'K%', 'Mg%', 'Na%', 'SB', 'Si', 'Silte', 'SO4', 'S/P', 't', 'V%', 'Zn']]
         
-        # Removendo items indesejaveis
+        # Removing unwanted items. 
         self.df['prof'] = self.df['prof'].str.replace('PONTO ', '')
         self.df['id'] = self.df['id'].str.replace('(', '', regex=True)
         self.df['id'] = self.df['id'].str.replace(')', '', regex=True)
 
-        # Atualize a tabela
+        # Updating the table. 
         self.loadTable()
 
 
