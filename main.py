@@ -118,7 +118,7 @@ class MainWindow(QMainWindow):
 
     def option1(self):
         # Renomeando colunas
-        self.df = self.df.rename(columns={'IDENTIF_1': 'id', 'IDENTIF_2': 'prof', 'AL': 'Al', 'AR_FINA': 'Areia fina',
+        self.df = self.df.rename(columns={'IDENTIF_2': 'id', 'IDENTIF_1': 'prof', 'AL': 'Al', 'AR_FINA': 'Areia fina',
                         'AR_GROSSA': 'Areia grossa', 'ARGILA': 'Argila', 'CA': 'Ca', 'CA_MG': 'Ca+Mg',
                         'CL': 'Cl', 'CU': 'Cu', 'FE': 'Fe', 'H_AL': 'H/Al', 'MG': 'Mg', 'MN': 'Mn',
                         'M_ORG': 'MOS', 'NA': 'Na', 'PH_H2O': 'pH Agua', 'PH_CACL2': 'pH CaCl2',
@@ -175,10 +175,10 @@ class MainWindow(QMainWindow):
                 'K%', 'Mg%', 'Na%', 'SB', 'Si', 'Silte', 'SO4', 'S/P', 't', 'V%', 'Zn']]
         
         # Removing unwanted items. 
-        self.df['prof'] = self.df['prof'].str.replace('PONTO ', '')
-        self.df['id'] = self.df['id'].str.replace('(', '', regex=True)
-        self.df['id'] = self.df['id'].str.replace(')', '', regex=True)
-
+        self.df['id'] = self.df['id'].str.replace('PONTO ', '')
+        self.df['prof'] = self.df['prof'].str.replace('(', '')
+        self.df['prof'] = self.df['prof'].str.replace(')', '')
+        
         # Updating the table. 
         self.loadTable()
 
