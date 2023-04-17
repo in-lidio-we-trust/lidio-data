@@ -178,9 +178,58 @@ class MainWindow(QMainWindow):
         self.df['id'] = self.df['id'].str.replace('PONTO ', '')
         self.df['prof'] = self.df['prof'].str.replace('(', '')
         self.df['prof'] = self.df['prof'].str.replace(')', '')
-        
+        self.df = self.insert_row(0, self.df, ['', '', 'cmolc/dm³', 'meq/L', 'metros', '%', 
+                                               '%', '%', '%', 'ppm', 'cmolc/dm³', 'cmolc/dm³', 'cmolc/dm³',
+                                               'meq/L', 'dS/m', 'ppm', 'meq/L', 'cmolc/dm³', 'ppm', 'g/dm³',
+                                               'ppm', 'Sem Unidade', '%', 'cmolc/dm³', 'cmolc/dm³', 'meq/L',
+                                               'cmolc/dm³', 'ppm', 'Sem Unidade', 'meq/L', '%',	'cmolc/dm³',
+                                               'meq/L',	'ppm', '%',	'cmolc/dm³', 'cmolc/dm³', 'meq/L', 
+                                               'meq/L',	'meq/L', 'ppm', 'ppm', 'Sem Unidade', 'Sem Unidade',
+                                               'Sem Unidade', 'Sem Unidade', 'Sem Unidade', 'ppm','ppm','ppm'
+                                               ,'ppm','ppm', 'Sem Unidade', 'Sem Unidade', 'Sem Unidade', 
+                                               'Sem Unidade', 'Sem Unidade', 'Sem Unidade', 'ppm', '%', '%',
+                                               '%', '%', '%', '%', '%', 'cmolc/dm³', '%', '%', 'meq/L', 'Sem Unidade',
+                                               'cmolc/dm³', '%', 'ppm'])
         # Updating the table. 
         self.loadTable()
+
+# Function to insert row in the dataframe
+    def insert_row(self, row_number, df, row_value):
+        # Starting value of upper half
+        start_upper = 0
+
+        # End value of upper half
+        end_upper = row_number
+
+        # Start value of lower half
+        start_lower = row_number
+
+        # End value of lower half
+        end_lower = df.shape[0]
+
+        # Create a list of upper_half index
+        upper_half = [*range(start_upper, end_upper, 1)]
+
+        # Create a list of lower_half index
+        lower_half = [*range(start_lower, end_lower, 1)]
+
+        # Increment the value of lower half by 1
+        lower_half = [x.__add__(1) for x in lower_half]
+
+        # Combine the two lists
+        index_ = upper_half + lower_half
+
+        # Update the index of the dataframe
+        df.index = index_
+
+        # Insert a row at the end
+        df.loc[row_number] = row_value
+
+        # Sort the index labels
+        df = df.sort_index()
+
+        # return the dataframe
+        return df
 
 
 if __name__ == "__main__":
